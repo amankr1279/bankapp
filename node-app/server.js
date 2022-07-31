@@ -80,7 +80,9 @@ app.post("/validateUser", (req, res) => {
                 if (result2.length > 0) {
                     console.log("Correct pwd");
                     res.status(200).json({
-                        "msg": "Logged succesfully!!"
+                        "msg": "Logged succesfully!!",
+                        "usrname": result2[0]['name'],
+                        "accnt_num": result2[0]['account_num']
                     })
                 }
                 else {

@@ -30,10 +30,14 @@ export class LoginComponent implements OnInit {
     console.log(this.loginForm.value);
     this.http.post<any>("http://127.0.0.1:3000/validateUser", this.loginForm.value, this.httpOptions)
       .subscribe({
-        next: () => {
-          this.loginForm.reset();
-          this.router.navigate(['/dashboard'])
-          alert("Login Succesfull!!");
+        next: (nx) => {
+          console.log(nx)
+          setTimeout(() => {
+            alert("Login Succesfull!!");
+            this.loginForm.reset();
+            this.router.navigate(['/dashboard'])
+          }, 3000)
+          // Send usrname and account_num to dashboard
         }
         , error: (err) => {
           //console.log(err.error.msg)
