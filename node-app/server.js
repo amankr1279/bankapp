@@ -82,7 +82,8 @@ app.post("/validateUser", (req, res) => {
                     res.status(200).json({
                         "msg": "Logged succesfully!!",
                         "usrname": result2[0]['name'],
-                        "accnt_num": result2[0]['account_num']
+                        "balance": result2[0]['balance'],
+                        "accnt_num": result2[0]['account_num'],
                     })
                 }
                 else {
@@ -96,12 +97,12 @@ app.post("/validateUser", (req, res) => {
 
 })
 
-app.get("/isUser?", (req, res) => {
-    let data = req.body.account_num
+app.post("/isUser", (req, res) => {
+    let data = req.body.accnt_num_ben
     console.log(data)
     let sqlSelect = `SELECT * from userInfo where account_num = ${data} ;`;
     con.query(sqlSelect, (err, result) => {
-        if (err) throw err;
+        //if (err) throw err;
         //console.log(result);
         if (result.length > 0) {
             res.status(200).json({
@@ -116,32 +117,71 @@ app.get("/isUser?", (req, res) => {
     })
 })
 
-app.post("/addMoney", (req, res) => {
+app.post("/sendMoney", (req, res) => {
     let data = {
-        account_num: req.body.account_num,
-        amt: req.body.amount
+        accnt1: req.body.accnt1,
+        accnt2: req.body.accnt2,
+        amt: req.body.amt
     }
     console.log(data)
-    let sqlSelect = `SELECT * from userInfo where account_num = ${data.account_num} ;`;
+    let sqlSelect = `SELECT * from userInfo where account_num = ${data.accnt1};`;
     con.query(sqlSelect, (err, result) => {
-        if (result.length > 0) {
-            var newBalance = result[0]['balance'] + data.amt
-            con.query(`update userInfo set balance = ${newBalance} account_num = ${data.account_num};`)
-            res.status(200).json({
-                "msg": `Added Money to ${data.account_num} `
+        if (err) {
+            res.status(401).json({
+                "msg": "Transaction Failed!!"
             })
         }
-        else {
-            res.status(401).json({
-                "msg": "Something went wrong!!"
+        else if (result.length > 0) {
+            var bal1 = result[0]['balance'] - data.amt
+            con.query(`update userInfo set balance = ${bal1} where account_num = ${data.accnt1};`, (err) => {
+                if (err) {
+                    res.status(401).json({
+                        "msg": "Transaction Failed!!"
+                    })
+                }
+            })
+            con.query(`SELECT * from userInfo where account_num = ${data.accnt2};`, (err, resul2) => {
+                var bal2 = resul2[0][`balance`] + data.amt
+                con.query(`update userInfo set balance = ${bal2} where account_num = ${data.accnt2};`, (err) => {
+                    if (err) {
+                        res.status(401).json({
+                            "msg": "Transaction Failed!!"
+                        })
+                    }
+                })
+            })
+
+
+            res.status(200).json({
+                "msg": `Successfully sent Rs. ${data.amt} from ${data.accnt1} to ${data.accnt2} `
             })
         }
     })
+
+
+    // con.query(sqlSelect, (err, result) => {
+    //     if (result.length > 0) {
+    //         var newBalance = result[0]['balance'] - data.amt
+    //         con.query(`update userInfo set balance = ${newBalance} account_num = ${data.accnt1};`)
+    //         con.query(`SELECT * from userInfo where account_num = ${data.accnt2} ;`, (err, result2) => {
+
+    //             con.query(`update userInfo set balance = ${newBalance + data.amt * 2} account_num = ${data.accnt1};`)
+    //         })
+    //         res.status(200).json({
+    //             "msg": `Added Money to ${data.account_num} `
+    //         })
+    //     }
+    //     else {
+    //         res.status(401).json({
+    //             "msg": "Something went wrong!!"
+    //         })
+    //     }
+    // })
 })
 
-app.use((req, res) => {
-    res.render('404.ejs');
-})
+// app.use((req, res) => {
+//     res.render('404.ejs');
+// })
 
 app.listen(3000, () => {
     console.log("Server is running on 3000");

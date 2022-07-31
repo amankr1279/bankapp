@@ -1,34 +1,41 @@
 <div class="container mt-3">
     <div class="mt-4 bg-light p-5">
-        <h1>User Name</h1>
-        <h3>Balance: </h3>
+        <h1>User Name: {{usrName}} </h1>
+        <h3>Balance: {{usrBal}} </h3>
     </div>
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <div class="card-body">
-                    <form>
-                        <h4 class="card-title">Add Beneficiary:</h4>
-                        <div class="form-group">
-                            <!-- formControlName="accntNum" -->
-                            <label for="exampleInputPassword1">Account Number:</label>
-                            <input type="number" class="form-control" id="accnt_num" placeholder="Enter account number">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Verify Beneficiary</button>
-                    </form>
+                <div class="card">
+                    <div class="card-body">
+                        <form [formGroup]="beneficiaryForm" (ngSubmit)="checkAccount()">
+                            <h4 class="card-title">Add Beneficiary:</h4>
+                            <div class="form-group">
+                                <!-- formControlName="accntNum" -->
+                                <label for="exampleInputPassword1">Account Number:</label>
+                                <input formControlName="accnt_num_ben" type="number" class="form-control" id="accnt_num"
+                                    placeholder="Enter account number">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Verify Beneficiary</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card-body">
-                    <form>
-                        <h4 class="card-title">Send Money:</h4>
-                        <div class="form-group">
-                            <!-- formControlName="accntNum" -->
-                            <label for="exampleInputPassword1">Enter the amount to be sent:</label>
-                            <input type="number" class="form-control" id="send_amt" placeholder="Send Amount">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Pay</button>
-                    </form>
+                <div class="card">
+                    <div class="card-body">
+                        <form [formGroup]="sendMoneyForm" (ngSubmit)="sendMoney()">
+                            <h4 class="card-title">Send Money:</h4>
+                            <div class="form-group">
+                                <!-- formControlName="accntNum" -->
+                                <label for="exampleInputPassword1">Enter the amount to be sent:</label>
+                                <input formControlName="sendAmt" type="number" class="form-control" id="send_amt"
+                                    placeholder="Send Amount">
+                            </div>
+                            <button type="submit" class="btn btn-danger">Pay</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

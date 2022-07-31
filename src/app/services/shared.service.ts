@@ -6,19 +6,26 @@ import { Injectable } from '@angular/core';
 export class SharedService {
 
   usrName = ""
-  usrAccnt_num = 0
+  usrBalance = 0
+  usrAccnt = 0
   constructor() { }
   setName(data: string) {
     this.usrName = data;
   }
+  setBalance(data: number) {
+    this.usrBalance = data;
+  }
   setAccnt(data: number) {
-    this.usrAccnt_num = data;
+    this.usrAccnt = data;
   }
   getName() {
     return this.usrName
   }
+  getBalance() {
+    return this.usrBalance
+  }
   getAccnt() {
-    return this.usrAccnt_num
+    return this.usrAccnt
   }
 
 }
