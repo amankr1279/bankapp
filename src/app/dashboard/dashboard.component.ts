@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
       "accnt_num_ben": 0
     })
     this.sendMoneyForm = this.formBuild.group({
-      "sendAmt": [{ value: 0, disabled: false }]
+      "sendAmt": [{ value: 0, disabled: true }]
     })
   }
 
@@ -49,6 +49,7 @@ export class DashboardComponent implements OnInit {
           this.usrBal = this.usrBal
           console.log(nx)
           //this.sendMoneyForm.disable.apply(false)
+          this.sendMoneyForm.controls['sendAmt'].enable()
         },
         error: (err) => {
           alert(err.error.msg)
